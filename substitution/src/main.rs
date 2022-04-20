@@ -1,3 +1,11 @@
+use substitution::encrypt;
+
 fn main() {
-    println!("Hello, world!");
+    println!(
+        "{}",
+        encrypt(
+            String::from("Hello, World!"),
+            String::from("pvwabchqrguoefyijsxlmnzdkt")
+        )
+    );
 }
