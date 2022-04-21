@@ -1,7 +1,33 @@
-pub fn encrypt(text: String, key: String) -> String {
+use std::{ env, fs };
+
+pub struct Config {
+    path: String,
+    key: String,
+}
+
+impl Config {
+    pub fn new(args: &mut env::Args) -> Result<Config, &'static str> {
+        args.next();
+
+        let path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Missing text input"),
+        };
+
+        let key = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Missing key input"),
+        };
+
+        Ok(Config { path, key })
+    }
+}
+
+pub fn encrypt(config: &Config) -> String {
+    let text = fs::read_to_string(&config.path).unwrap();
     let out: String = text
         .chars()
-        .map(|char| -> char { map_char(char, &key) })
+        .map(|char| -> char { map_char(char, &config.key) })
         .collect();
     out
 }
@@ -59,8 +85,7 @@ mod test {
     fn encryption() {
         assert_eq!(
             encrypt(
-                String::from("Hello, World!"),
-                String::from("pvwabchqrguoefyijsxlmnzdkt")
+                &Config { path: String::from("C:/Dev/CS50/substitution/test.txt"), key: String::from("pvwabchqrguoefyijsxlmnzdkt") }
             ),
             String::from("Qbooy, Zysoa!")
         );

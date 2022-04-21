@@ -1,11 +1,10 @@
-use substitution::encrypt;
+use std::env;
+use substitution::{encrypt, Config};
 
 fn main() {
-    println!(
-        "{}",
-        encrypt(
-            String::from("Hello, World!"),
-            String::from("pvwabchqrguoefyijsxlmnzdkt")
-        )
-    );
+    let mut args = env::args();
+
+    let config = Config::new(&mut args).unwrap();
+
+    println!("Encrypted text: {}", encrypt(&config));
 }
